@@ -27,7 +27,13 @@ app.post("/notifications", async(req, res)=>{
         await sendEmail({
             to:"22053660@kiit.ac.in",
             subject:"Notification",
-            text:`Dear ${req.body.userName},\n\n${req.body.message}`
+            html:`
+        <p>Dear <strong>${req.body.userName}</strong>,</p>
+        <p>${req.body.message}</p>
+        <br />
+        <hr />
+        <p>Sent from <b><i>Automatic Notification Service System</i></b></p>
+        `
         });
         await pool.query(
         'INSERT INTO notifications (user_name, message, notification_type, action) VALUES ($1, $2, $3, $4)',

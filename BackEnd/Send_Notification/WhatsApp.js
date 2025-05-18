@@ -13,7 +13,7 @@ try{
     const message = await client.messages.create({
         from:'whatsapp:+14155238886',
         to: `whatsapp:${to}`,
-        body:`Dear ${userName},\n\n${body}`
+        body: `*Dear ${userName},*\n\n${body}\n\n--------------------------------------------------------------\n_Sent via Automatic Notification Service_`
     });
     console.log("Messgae SID: ", message.sid);
 }
