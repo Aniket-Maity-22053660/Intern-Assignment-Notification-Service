@@ -32,7 +32,7 @@ app.post("/notifications", async(req, res)=>{
         <p>${req.body.message}</p>
         <br />
         <hr />
-        <p>Sent from <b><i>Automatic Notification Service System</i></b></p>
+        <p>Sent from <b><i>Automatic Notification Service System.</i></b></p>
         `
         });
         await pool.query(

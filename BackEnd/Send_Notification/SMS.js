@@ -11,7 +11,7 @@ const client = twilio(accountSid, authToken);
 try{
 client.messages
     .create({
-        body: `Dear ${userName},\n\n${message}\n\n---------------------------------------\nSent via Automatic Notification Service`,
+        body: `Dear ${userName},\n\n${message}\n\n---------------------------------------\nSent via Automatic Notification Service System.`,
         from:'+19135657839',
         to
     })
