@@ -5,6 +5,8 @@ import { pool } from "./DB_Config/db.js";
 import { sendEmail } from "./Send_Notification/Email.js";
 import { sendSMS } from "./Send_Notification/SMS.js";
 import { sendWhatsApp } from "./Send_Notification/WhatsApp.js";
+import { sendNotificationMessage } from './kafka/producer.js';
+import { startNotificationWorker } from './kafka/consumer.js';
 
 dotenv.config();
 
@@ -20,50 +22,16 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true})); // Parses incoming JSON requests
 app.use(express.static("public"));
 
-app.post("/notifications", async(req, res)=>{
-    console.log(req.body);
-    const {userName, message, notificationType, action} = req.body;
-    if(req.body.notificationType ===  'Email'){
-        await sendEmail({
-            to:"22053660@kiit.ac.in",
-            subject:"Notification",
-            html:`
-        <p>Dear <strong>${req.body.userName}</strong>,</p>
-        <p>${req.body.message}</p>
-        <br />
-        <hr />
-        <p>Sent from <b><i>Automatic Notification Service System.</i></b></p>
-        `
-        });
-        await pool.query(
-        'INSERT INTO notifications (user_name, message, notification_type, action) VALUES ($1, $2, $3, $4)',
-        [userName, message, notificationType, action]
-        );
-    }
-    else if(req.body.notificationType === 'SMS'){
-        await sendSMS({to:'+91 95472 56351', userName:req.body.userName,message:req.body.message});
-        await pool.query(
-        'INSERT INTO notifications (user_name, message, notification_type, action) VALUES ($1, $2, $3, $4)',
-        [userName, message, notificationType, action]
-        );
-    }
-    else if(req.body.notificationType === 'Whats_App'){
-        await sendWhatsApp({to:'+919547256351', body: req.body.message, userName:req.body.userName});
-        await pool.query(
-        'INSERT INTO notifications (user_name, message, notification_type, action) VALUES ($1, $2, $3, $4)',
-        [userName, message, notificationType, action]
-        );
-    }
-    else if(req.body.notificationType === 'In_App'){
-        await pool.query(
-        'INSERT INTO notifications (user_name, message, notification_type, action) VALUES ($1, $2, $3, $4)',
-        [userName, message, notificationType, action]
-    );
+app.post("/notifications", async (req, res) => {
+  const { userName, message, notificationType, action } = req.body;
 
-
-    }
-    res.json({msg:"Received Successfully !"});
-})
+  try{
+  await sendNotificationMessage({ userName, message, notificationType, action });
+  }catch(err){
+    console.log(err);
+  }
+  res.json({ msg: "Notification enqueued successfully!" });
+});
 
 app.get("/users/:username/notifications", async (req, res) => {
   const userName = decodeURIComponent(req.params.username);
