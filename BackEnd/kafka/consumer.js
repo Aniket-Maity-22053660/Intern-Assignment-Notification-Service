@@ -19,7 +19,7 @@ export const startNotificationWorker = async () => {
           await sendEmail({
             to: "22053660@kiit.ac.in",
             subject: "Notification",
-            html: `<p>Dear <b>${userName}</b>,<br>${message}</p>`
+            html: `<p>Dear <b>${userName}</b>,<br><br>${message}</p><br><br><hr>Sent from <b><i>Automatic Notification Service System</i><b>`
           });
         } else if (notificationType === 'SMS') {
           await sendSMS({ to: '+919547256351', userName, message });
