@@ -283,8 +283,9 @@ Fetches notification history for display.
 
 ### Notification Form
 
-![Notification Form - Step 1](Screen_Shots/Screenshot_2025-05-19_024103-1.png)
-![Notification Form - Step 2](Screen_Shots/Screenshot_2025-05-19_024132.png)
+![Notification Form - Step 1](./BackEnd/Screen_Shots/Screenshot_2025-05-19_024103-1.png)
+![Notification Form - Step 2](./BackEnd/Screen_Shots/Screenshot_2025-05-19_024132.png)
+
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
