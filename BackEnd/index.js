@@ -7,6 +7,16 @@ import { sendSMS } from "./Send_Notification/SMS.js";
 import { sendWhatsApp } from "./Send_Notification/WhatsApp.js";
 import { sendNotificationMessage } from './kafka/producer.js';
 import { startNotificationWorker } from './kafka/consumer.js';
+import { producer } from './kafka/kafkaClient.js';
+
+(async () => {
+  try {
+    await producer.connect();
+    console.log("Kafka Producer connected.");
+  } catch (err) {
+    console.error("Producer connection error:", err);
+  }
+})();
 
 dotenv.config();
 
@@ -75,4 +85,5 @@ app.get("/", (req, res)=>{
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
+  startNotificationWorker();
 });
