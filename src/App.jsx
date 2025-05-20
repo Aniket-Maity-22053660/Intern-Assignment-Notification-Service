@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import { Main_page } from './component/Main_Page.jsx'
+import { ToastContainer } from 'react-toastify';
 import './App.css'
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
     <>
       <div>
         <Main_page />
+        <ToastContainer />
       </div>
     </>
   )

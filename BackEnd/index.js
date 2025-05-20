@@ -52,17 +52,18 @@ app.get("/users/:username/notifications", async (req, res) => {
       [userName]
     );
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({
+    if (result.rows.length == 0) {
+      console.log("we are inside.");
+      return res.json({
         status: "fail",
         message: `No notifications found for user: ${userName}`,
       });
-    }
-
+    }else{
     res.json({
       status: "success",
       array: result.rows,
     });
+  }
 
   } catch (error) {
     console.error("Error retrieving notifications:", error);

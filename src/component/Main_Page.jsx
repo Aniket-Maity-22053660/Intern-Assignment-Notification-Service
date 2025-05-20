@@ -1,5 +1,7 @@
 import React, {useState}from "react";
 import axios from "axios";
+import { toast } from 'react-toastify';
+
 import "./Main_page.css";
 export const Main_page = ()=>{
 
@@ -23,6 +25,7 @@ export const Main_page = ()=>{
 
   if(action === 'Send'){
   try {
+    if(userName && message && notificationType && action){
     const response = await axios.post("http://localhost:5000/notifications", {
       userName,
       message,
@@ -30,6 +33,20 @@ export const Main_page = ()=>{
       action, // send action if needed
     });
     console.log("Server response:", response.data);
+    toast.success("Notification sent successfully!");
+    setUserName("");
+    setMessage("");
+    setNotificationType("");
+  }
+  else if(!userName){
+    toast.error("Please enter the valid user name!");
+  }
+  else if(!message){
+    toast.error("Please enter the valid message!");
+  }
+  else if(!notificationType){
+    toast.error("Please select a valid notification type!");
+  }
   } catch (error) {
     console.error("Error submitting form:", error);
   }
@@ -79,19 +96,24 @@ export const Main_page = ()=>{
                 <input type="submit" value="Send" name="action"/>
                 <button type="button" className="notify-button" onClick={async () => {
                 try {
+                  if(userName){
                 const response = await axios.get(`http://localhost:5000/users/${encodeURIComponent(userName)}/notifications`);
                 if (response.data.status === "success") {
                 setUserInfo(response.data.array);
                 setSeeNotifications(true);
                 console.log(response.data.array);
-                } else {
+                } else if(response.data.status === "fail"){
                 setUserInfo(null);
-                alert("No user found or no notifications");
+                toast.error(response.data.message);
                 }
-                } catch (error) {
+              }else{
+                toast.error("Please enter the valid user name!");
+              }
+                }catch (error) {
                 console.error("Error fetching notifications:", error);
-                alert("Error fetching notifications");
+                alert("Error fetching notifications!");
                 }
+              
                 }}>Notifications</button>
                 </div>
                 </form>:<div className="notification-container">
